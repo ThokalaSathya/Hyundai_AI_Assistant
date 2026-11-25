@@ -6,6 +6,7 @@ import { getBatchEmbeddings } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 
+/*
 async function extractPdfText(buffer: Buffer): Promise<string> {
   const { PDFParse } = await import("pdf-parse");
   const parser = new PDFParse({ data: buffer });
@@ -17,6 +18,24 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
     await parser.destroy();
   }
 }
+*/
+
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  const { CanvasFactory } = await import("pdf-parse/worker");
+  const { PDFParse } = await import("pdf-parse");
+  const parser = new PDFParse({
+    data: new Uint8Array(buffer),
+    CanvasFactory,
+  });
+
+  try {
+    const result = await parser.getText();
+    return typeof result === "string" ? result : result.text;
+  } finally {
+    await parser.destroy();
+  }
+}
+
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
