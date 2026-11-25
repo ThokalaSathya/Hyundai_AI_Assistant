@@ -1,16 +1,20 @@
-import type { NextConfig } from "next";
+/*import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  serverExternalPackages: ["pdf-parse"],
+};
+
+export default nextConfig;
+
+*/
+
+import type { NextConfig } from "next";
+import path from "path";
+
+const nextConfig: NextConfig = {
+  serverExternalPackages: ["pdf-parse"],
   turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
+    root: path.resolve(__dirname),
   },
 };
 
